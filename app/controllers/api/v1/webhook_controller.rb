@@ -9,6 +9,7 @@ class Api::V1::WebhookController < ApiController
   end
 
   def receive
+    WebhookParserService.new(params).call
     render json: { message: 'Message received' }
   end
 end
