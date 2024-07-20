@@ -12,7 +12,8 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       get 'test', to: 'test#index'
-      get 'webhook', to: 'webhook#index'
+      get 'webhook', to: 'webhook#verify'
+      post 'webhook', to: 'webhook#receive'
     end
   end
 end
