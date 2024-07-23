@@ -10,9 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_20_052002) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_23_013314) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "expenses", force: :cascade do |t|
+    t.decimal "amount", default: "0.0"
+    t.text "description"
+    t.datetime "timestamp"
+    t.integer "group", default: 0
+    t.bigint "message_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["message_id"], name: "index_expenses_on_message_id"
+  end
 
   create_table "messages", force: :cascade do |t|
     t.string "sender_name"
@@ -24,4 +35,5 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_20_052002) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "expenses", "messages"
 end
