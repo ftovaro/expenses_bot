@@ -18,7 +18,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_23_013314) do
     t.decimal "amount", default: "0.0"
     t.text "description"
     t.datetime "timestamp"
-    t.integer "group", default: 0
+    t.integer "group", default: 1
     t.bigint "message_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

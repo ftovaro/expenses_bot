@@ -24,4 +24,24 @@ RSpec.describe Message, type: :model do
       expect(build(:message, timestamp: nil)).to_not be_valid
     end
   end
+
+  describe 'associations' do
+    it 'has one expense' do
+      expect(Message.reflect_on_association(:expense).macro).to eq(:has_one)
+    end
+
+    it 'destroys associated expense' do
+      message = create(:message)
+
+      message.destroy
+
+      expect(Expense.count).to eq(0)
+    end
+
+    it 'creates associated expense' do
+      create(:message)
+
+      expect(Expense.count).to eq(1)
+    end
+  end
 end

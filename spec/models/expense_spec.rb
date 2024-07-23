@@ -26,4 +26,14 @@ RSpec.describe Expense, type: :model do
       expect(Expense.reflect_on_association(:message).macro).to eq(:belongs_to)
     end
   end
+
+  describe 'enums' do
+    it 'has a group enum' do
+      expect(Expense.groups.keys).to eq(%w[group_1 group_2])
+    end
+
+    it 'has a default group' do
+      expect(build(:expense).group).to eq('group_1')
+    end
+  end
 end
