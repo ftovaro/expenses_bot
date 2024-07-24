@@ -1,6 +1,9 @@
 class WebhookParserService
+  attr_reader :message
+
   def initialize(params)
     @params = params
+    @message = nil
   end
 
   def call
@@ -33,7 +36,7 @@ class WebhookParserService
     body = message.dig('text', 'body')
     timestamp = message['timestamp']
 
-    Message.create!(
+    @message = Message.create!(
       sender_name: sender_name,
       sender_phone: sender_phone,
       body: body,

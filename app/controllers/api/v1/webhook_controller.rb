@@ -9,7 +9,14 @@ class Api::V1::WebhookController < ApiController
   end
 
   def receive
-    WebhookParserService.new(params).call
+    webhook_parser = WebhookParserService.new(params)
+    webhook_parser.call
+
+    if webhook_parser.message.present?
+      message = webhook_parser.message
+      ExpenseWriterToSheetService.new(message.expense).call
+    end
+
     render json: { message: 'Message received' }
   end
 end
