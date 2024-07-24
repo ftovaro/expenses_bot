@@ -55,6 +55,12 @@ gem 'scout_apm'
 # Rollbar
 gem 'rollbar'
 
+# Sidekiq
+gem 'sidekiq', '~> 7.3'
+
+# Redis
+gem 'redis', '~> 5.2'
+
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

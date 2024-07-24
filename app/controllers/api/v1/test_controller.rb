@@ -1,5 +1,7 @@
 class Api::V1::TestController < ApiController
   def index
+    ExampleJob.perform_async('arg1', 'arg2')
+
     render json: { message: 'Hello World!' }, status: :ok
     # service = GoogleSheetsService.new
     # spreadsheet_id = ENV['SPREADSHEET_ID']
