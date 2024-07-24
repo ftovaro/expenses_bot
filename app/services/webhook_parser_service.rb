@@ -30,13 +30,13 @@ class WebhookParserService
 
   def store_message_data(message, sender_name)
     sender_phone = message['from']
-    message_body = message.dig('text', 'body')
+    body = message.dig('text', 'body')
     timestamp = message['timestamp']
 
     Message.create!(
       sender_name: sender_name,
       sender_phone: sender_phone,
-      message_body: message_body,
+      body: body,
       timestamp: Time.at(timestamp.to_i)
     )
   end
