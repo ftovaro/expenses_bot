@@ -52,6 +52,9 @@ gem 'googleauth', '~> 1.11.0'
 # Scout
 gem 'scout_apm'
 
+# Rollbar
+gem 'rollbar'
+
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
