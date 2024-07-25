@@ -1,5 +1,5 @@
 class WebhookParserService
-  attr_reader :message, :sender_phone, :body, :timestamp
+  attr_reader :message, :sender_name, :sender_phone, :body, :timestamp
 
   def initialize(params)
     @params = params
@@ -21,7 +21,7 @@ class WebhookParserService
         value = change['value']
         contacts = value['contacts'] || []
         contacts.each do |contact|
-          sender_name = contact.dig('profile', 'name') || "Unknown"
+          @sender_name = contact.dig('profile', 'name') || "Unknown"
         end
         messages = value['messages'] || []
         messages.each do |message|
@@ -35,12 +35,5 @@ class WebhookParserService
     @sender_phone = message['from']
     @body = message.dig('text', 'body')
     @timestamp = message['timestamp']
-
-    # @message = Message.create!(
-    #   sender_name: sender_name,
-    #   sender_phone: sender_phone,
-    #   body: body,
-    #   timestamp: Time.at(timestamp.to_i)
-    # )
   end
 end

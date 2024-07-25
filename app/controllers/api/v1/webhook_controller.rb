@@ -1,22 +1,31 @@
 class Api::V1::WebhookController < ApiController
   def verify
-    # token = 'HAPPY'
-    # if params.dig('hub.verify_token') == token
-    #   return render plain: params.dig('hub.challenge')
-    # end
+    token = 'HAPPY'
+    if params.dig('hub.verify_token') == token
+      return render plain: params.dig('hub.challenge')
+    end
 
     render json: { message: 'Verification failed' }, status: :forbidden
   end
 
   def receive
-    # webhook_parser = WebhookParserService.new(params)
-    # webhook_parser.call
+    params_hash = convert_to_json_compatible(params.to_unsafe_h)
 
-    # if webhook_parser.message.present?
-    #   message = webhook_parser.message
-    #   ExpenseWriterToSheetService.new(message.expense).call
-    # end
+    WhatsappMessageParserJob.perform_async(params_hash)
 
     render json: { message: 'Message received' }
+  end
+
+  private
+
+  def convert_to_json_compatible(value)
+    case value
+    when Hash
+      value.each_with_object({}) { |(k, v), h| h[k.to_s] = convert_to_json_compatible(v) }
+    when Array
+      value.map { |v| convert_to_json_compatible(v) }
+    else
+      value
+    end
   end
 end

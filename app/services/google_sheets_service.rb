@@ -1,6 +1,3 @@
-require 'google/apis/sheets_v4'
-require 'googleauth'
-
 class GoogleSheetsService
   APPLICATION_NAME = 'Expenses Bot'.freeze
 
@@ -10,9 +7,22 @@ class GoogleSheetsService
     @service.authorization = authorize
   end
 
-  def write_to_sheet(spreadsheet_id, range, value)
-    value_range = Google::Apis::SheetsV4::ValueRange.new(values: [[value]])
-    @service.update_spreadsheet_value(spreadsheet_id, range, value_range, value_input_option: 'RAW')
+  def write_to_sheet(spreadsheet_id, range, values)
+    value_range = Google::Apis::SheetsV4::ValueRange.new(values: [values])
+    @service.append_spreadsheet_value(spreadsheet_id, range, value_range, value_input_option: 'RAW')
+  end
+
+  def get_spreadsheet(spreadsheet_id)
+    @service.get_spreadsheet(spreadsheet_id)
+  end
+
+  def batch_update_spreadsheet(spreadsheet_id, batch_update_request)
+    @service.batch_update_spreadsheet(spreadsheet_id, batch_update_request)
+  end
+
+  def get_last_filled_row(spreadsheet_id, sheet_name)
+    response = @service.get_spreadsheet_values(spreadsheet_id, "#{sheet_name}!A:A")
+    response.values ? response.values.size : 0
   end
 
   private
