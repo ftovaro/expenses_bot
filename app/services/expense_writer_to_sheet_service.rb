@@ -28,7 +28,6 @@ class ExpenseWriterToSheetService
     @logger.info "Writing data to range: #{range}, values: #{values}"
 
     service.write_to_sheet(spreadsheet_id, range, values)
-    format_currency(service, spreadsheet_id, sheet_id, format_range)
     { message: 'Successfully written to Google Sheets.', status: :ok }
   rescue => e
     @logger.error "Error writing to Google Sheets: #{e.message}"
@@ -55,33 +54,6 @@ class ExpenseWriterToSheetService
     last_row = service.get_last_filled_row(spreadsheet_id, sheet_name)
     @logger.info "Last filled row in sheet '#{sheet_name}': #{last_row}"
     last_row + 1
-  end
-
-  def format_currency(service, spreadsheet_id, sheet_id, range)
-    requests = [{
-      repeat_cell: {
-        range: {
-          sheet_id: sheet_id,
-          start_row_index: range[:start_row_index],
-          end_row_index: range[:end_row_index],
-          start_column_index: range[:start_column_index],
-          end_column_index: range[:end_column_index]
-        },
-        cell: {
-          user_entered_format: {
-            number_format: {
-              type: 'CURRENCY',
-              pattern: '[$COP]#,##0.00'
-            }
-          }
-        },
-        fields: 'userEnteredFormat.numberFormat'
-      }
-    }]
-
-    batch_update_request = Google::Apis::SheetsV4::BatchUpdateSpreadsheetRequest.new(requests: requests)
-    @logger.info "Formatting currency in range: #{range}"
-    service.batch_update_spreadsheet(spreadsheet_id, batch_update_request)
   end
 
   def find_or_create_sheet(service, spreadsheet_id, sheet_name)
