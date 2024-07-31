@@ -61,7 +61,11 @@ gem 'sidekiq', '~> 7.3'
 # Redis
 gem 'redis', '~> 5.2'
 
+# Pry
 gem 'pry'
+
+# HTTParty
+gem 'httparty'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
