@@ -3,9 +3,14 @@ require 'googleauth'
 require 'logger'
 
 class ExpenseWriterToSheetService
-  def initialize(expense)
+  def initialize(expense, group)
     @expense = expense
     @logger = Logger.new(STDOUT)
+    @group = group
+    @spreadsheet_id = ENV['SPREADSHEET_ID']
+    if @group == 2
+      @spreadsheet_id = ENV['SPREADSHEET_ID_JUANJA']
+    end
   end
 
   def call
@@ -16,7 +21,7 @@ class ExpenseWriterToSheetService
 
   def write_to_sheet
     service = GoogleSheetsService.new
-    spreadsheet_id = ENV['SPREADSHEET_ID']
+    spreadsheet_id = @spreadsheet_id
     sheet_name = Date.today.strftime("%B") # Gets the current month name, e.g., 'July'
     @logger.info "Checking existence of sheet: #{sheet_name}"
     sheet_id = find_or_create_sheet(service, spreadsheet_id, sheet_name)
@@ -49,7 +54,7 @@ class ExpenseWriterToSheetService
 
   def find_next_available_row(sheet_name)
     service = GoogleSheetsService.new
-    spreadsheet_id = ENV['SPREADSHEET_ID']
+    spreadsheet_id = @spreadsheet_id
     sheet = service.get_spreadsheet(spreadsheet_id).sheets.find { |s| s.properties.title&.downcase == sheet_name&.downcase }
     last_row = service.get_last_filled_row(spreadsheet_id, sheet_name)
     @logger.info "Last filled row in sheet '#{sheet_name}': #{last_row}"

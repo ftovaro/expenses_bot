@@ -42,11 +42,12 @@ class MessageProcessor
   end
 
   def extract_group
-    case @timestamp.day
-    when 4..17
-      2
-    else
-      1
-    end
+    1
+    # case @timestamp.day
+    # when 4..17
+    #   2
+    # else
+    #   1
+    # end
   end
 end
